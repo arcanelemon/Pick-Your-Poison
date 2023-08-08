@@ -25,6 +25,9 @@ public class HUD : MonoBehaviour
     private GameObject exitText;
 
     [SerializeField]
+    private TextMeshProUGUI pickupText;
+
+    [SerializeField]
     private Animator fireVignetteAnimator;
 
     [SerializeField]
@@ -60,6 +63,16 @@ public class HUD : MonoBehaviour
     {
         reloadSpinFill.fillAmount = 0;
         reloadSpinner.SetActive(false);
+    }
+
+    public void updateFocus(string focusName)
+    {
+        pickupText.text = focusName;
+    }
+
+    public void clearFocus()
+    {
+        pickupText.text = "";
     }
 
     public void showFire()

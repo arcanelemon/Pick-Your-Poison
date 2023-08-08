@@ -8,5 +8,7 @@ public class Pickup : MonoBehaviour
     private int value;
 
     [SerializeField]
-    private string name;
+    private string description;
+    public string Description => description;
+
 }

@@ -178,8 +178,6 @@ public class PlayerController : MonoBehaviour
 
     private bool canFire = true;
 
-    private bool pickupInFocus;
-
     private bool exitPressed;
 
     private int currAmmo;
@@ -211,6 +209,8 @@ public class PlayerController : MonoBehaviour
     private Vector2 recoilTarget;
 
     private Vector3 recoilOverride;
+
+    private Pickup focus;
 
     #region Base
 
@@ -317,7 +317,7 @@ public class PlayerController : MonoBehaviour
 
     private void OnPickupPerformed()
     {
-        if (pickupInFocus)
+        if (focus)
             HandlePickup();
     }
 
@@ -445,7 +445,10 @@ public class PlayerController : MonoBehaviour
 
     private void HandlePickup()
     {
-
+        if (focus)
+        {
+            Destroy(focus.gameObject);
+        }
     }
 
     void EvaluateRecoil()
@@ -575,10 +578,19 @@ public class PlayerController : MonoBehaviour
         }
 
         // check focus
-        // Physics.CapsuleCast(cameraTransform.position, cameraTransform.position + (cameraTransform.forward * focusCheckDistance), focusCheckRadius, focusLayer)
-        if (pickupInFocus)
-        {
+        Collider[] focusCols = Physics.OverlapCapsule(cameraContainer.position, cameraContainer.position + (cameraContainer.forward * focusCheckDistance), focusCheckRadius, focusLayer, QueryTriggerInteraction.Collide);
 
+        if (focusCols.Length > 0)
+            focus = focusCols[0].GetComponent<Pickup>();
+        else
+            focus = null;
+
+        if (focus)
+        {
+            hud.updateFocus(focus.Description);
+        } else
+        {
+            hud.clearFocus();
         }
     }
 
